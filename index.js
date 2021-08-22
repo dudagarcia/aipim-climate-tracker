@@ -28,6 +28,11 @@ board.on("ready", function(){
     photoresistor.on("data", function(){
         console.log(this.value);
         firebase.database().ref('photoresistor').set(this.value);
+        if(this.value > 600){
+            catode.color(blue);
+            catode.blink(2000);
+            firebase.database().ref('led').set(blue);
+        }
     });
 
     //thermometer
@@ -44,6 +49,16 @@ board.on("ready", function(){
         console.log("kelvin: ", kelvin);
         console.log("------------");
         firebase.database().ref('temperature').set(celsius);
+        if(celsius > 25){
+            catode.color(yellow);
+            catode.blink(2000);
+            firebase.database().ref('led').set(yellow);
+        }
+        if(celsius > 30){
+            catode.color(red);
+            catode.blink(2000);
+            firebase.database().ref('led').set(red);
+        }
     });
 
     //rgb
@@ -63,13 +78,10 @@ board.on("ready", function(){
     var red = "#FF0000";
     var yellow = "#FF5500";
     var green = "#008000";
-    //catode.color(red);
-    //catode.color(yellow);
-    //catode.color(green);
-    catode.blink(1000);
-    firebase.database().ref('led').set(red);
-    //firebase.database().ref('led').set(yellow);
-    //firebase.database().ref('led').set(green);
+    var blue = "#6582C0";
+    catode.color(green);
+    catode.blink(2000);
+    firebase.database().ref('led').set(green);
 
     //dht11
     var multi = new five.Multi({
@@ -90,7 +102,7 @@ board.on("ready", function(){
     });
 
     //distance sensor
-    /*const proximity = new Proximity({
+    const proximity = new Proximity({
         controller: "HCSR04", 
         pin: 7
     });
@@ -100,19 +112,18 @@ board.on("ready", function(){
         console.log("Proximity: ", centimeters);
         console.log("--------------");
         firebase.database().ref('distance').set(centimeters);
-    });*/
-
-    /*if
-        (centimeters < 200 || 
-        (climate_type > 2 && temperature > 25) || 
-        (climate_type < 2 && temperature < 20) ||
-        ()
-        ){
-        //luz vermelha
-    }
-    if(this.value > 600){
-        //luz azul
-    }*/
+        if(centimeters < 500){
+            catode.color(yellow);
+            catode.blink(2000);
+            firebase.database().ref('led').set(yellow);
+        }
+        if(centimeters < 200){
+            catode.color(red);
+            catode.blink(2000);
+            firebase.database().ref('led').set(red);
+        }
+    });
+    
 
 });
 
