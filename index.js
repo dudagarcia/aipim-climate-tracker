@@ -101,6 +101,19 @@ board.on("ready", function(){
         console.log("--------------");
         firebase.database().ref('distance').set(centimeters);
     });*/
+
+    /*if
+        (centimeters < 200 || 
+        (climate_type > 2 && temperature > 25) || 
+        (climate_type < 2 && temperature < 20) ||
+        ()
+        ){
+        //luz vermelha
+    }
+    if(this.value > 600){
+        //luz azul
+    }*/
+
 });
 
 
