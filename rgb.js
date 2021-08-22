@@ -1,4 +1,4 @@
-const { Board, Thermometer } = require("johnny-five");
+const { Board, Led } = require("johnny-five");
 const board = new Board();
 
 
@@ -18,18 +18,26 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 
+
 board.on("ready", () => {
-    const thermometer = new Thermometer({
-        controller: "LM35", 
-        pin: "A0"
+    const catode = new Led.RGB({
+        pins:{
+            red: 6,
+            green: 5, 
+            blue: 3
+        },
+        isAnode: false
     });
 
-    thermometer.on("change", () => {
-        const {celsius, fahrenheit, kelvin} = thermometer;
-        console.log("Thermometer");
-        console.log("celsius: ", celsius);
-        console.log("fahrenheit: ", fahrenheit);
-        console.log("kelvin: ", kelvin);
-        console.log("------------");
-    });
+    board.repl.inject({ catode });
+
+    catode.on();
+
+    //vermelho
+    //catode.color("#FF0000");
+    //amarelo
+    //catode.color("#FF5500");
+    //verde
+    //catode.color("#008000");
+    catode.blink(1000);
 });

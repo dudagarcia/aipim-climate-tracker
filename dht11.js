@@ -1,5 +1,5 @@
-const { Board, Thermometer } = require("johnny-five");
-const board = new Board();
+var five = require("johnny-five");
+var board = new five.Board();
 
 
 //firebase connection
@@ -18,18 +18,20 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 
-board.on("ready", () => {
-    const thermometer = new Thermometer({
-        controller: "LM35", 
-        pin: "A0"
+board.on("ready", function(){
+    var multi = new five.Multi({
+        controller: "DHT11_I2C_NANO_BACKPACK"
     });
 
-    thermometer.on("change", () => {
-        const {celsius, fahrenheit, kelvin} = thermometer;
+    multi.on("change", function(){
         console.log("Thermometer");
-        console.log("celsius: ", celsius);
-        console.log("fahrenheit: ", fahrenheit);
-        console.log("kelvin: ", kelvin);
-        console.log("------------");
+        
+        console.log("fahrenheit: ", this.thermometer.fahrenheit);
+        console.log("celsius: ", this.thermometer.celsius);
+        console.log("kelvin: ", this.thermometer.kelvin);
+
+        console.log("Hygrometer");
+        console.log("relative humidity:", this.hygrometer.relativeHumidity);
+        console.log("-------------------");
     });
 });
